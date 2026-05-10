@@ -1,0 +1,6 @@
+"util/rand.dodo" IMPORT
+
+TIME DO SEED DO
+@LOOP:
+RAND DO 64 / DO 2 % DO 45 * DO 47 + DO OUTC DO
+"LOOP"GOTO DO

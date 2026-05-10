@@ -1,0 +1,11 @@
+0 "A" VAR
+1 "B" VAR
+DO DO
+
+@LOOP:
+    B OUTN      DO
+    A B +       DO
+    B "A" SET   DO
+      "B" SET   DO
+    10 OUTC     DO
+    "LOOP" GOTO DO 

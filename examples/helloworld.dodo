@@ -1,0 +1,3 @@
+"Hello, World!" OUTS DO
+"> " 10 OUTS DO 
+INPUTC DO OUTC DO
