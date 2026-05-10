@@ -47,7 +47,7 @@ B is the top of the stack, A is the element before the top
 | = | 15 | Checks if A is equal to B and pushes 1 if it is, and 0 if it isnt.
 | > | 16 | Checks if A is more than B and pushes 1 if it is, and 0 if it isnt.
 | < | 17 | Checks if A is less than B and pushes 1 if it is, and 0 if it isnt.
-### Var ops
+### Var Ops
 | Instruction | Opcode | Description |
 |:------------|:------:|:------------|
 | SET | 20 | Sets a variable pointed to by the preceding string to a value. E.g. `10 "HI" SET` |
