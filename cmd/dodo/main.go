@@ -75,6 +75,7 @@ func printHelp() {
 	fmt.Println("  init-lib   Create the global DODO library directory")
 	fmt.Println("  help       Show this help")
 	fmt.Println()
+	fmt.Println("Add a \"debug\" after any command to enter into debug mode and see things like the stack while the program is running.")
 	fmt.Println("If the first argument is not a command, it is treated as a script file.")
 }
 

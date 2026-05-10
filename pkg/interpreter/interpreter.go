@@ -410,7 +410,6 @@ func (i *Interpreter) Interpret(Debug bool) ([]int, error) {
 	for i.pos < len(i.Tokens) {
 		if Debug {
 			fmt.Printf("STACK PRE: %v\n", i.stack)
-			time.Sleep(time.Millisecond * time.Duration(10))
 		}
 		tok := i.Tokens[i.pos]
 		switch {
