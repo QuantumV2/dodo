@@ -10,8 +10,6 @@ import (
 	"time"
 )
 
-const DEBUG bool = false
-
 type variable struct {
 	val      []int
 	is_const bool
@@ -106,14 +104,13 @@ func NewInterpreter() *Interpreter {
 			">": {[]int{16}, true},
 			"<": {[]int{17}, true},
 
-			"get":      {[]int{20}, true},
-			"set":      {[]int{21}, true},
-			"var":      {[]int{22}, true},
-			"alias":    {[]int{23}, true},
-			"buf":      {[]int{24}, true},
-			"bufalias": {[]int{25}, true},
-			"setbuf":   {[]int{26}, true},
-			"del":      {[]int{27}, true},
+			"set":      {[]int{20}, true},
+			"var":      {[]int{21}, true},
+			"alias":    {[]int{22}, true},
+			"buf":      {[]int{23}, true},
+			"bufalias": {[]int{24}, true},
+			"setbuf":   {[]int{25}, true},
+			"del":      {[]int{26}, true},
 
 			"goto":  {[]int{40}, true},
 			"gosub": {[]int{41}, true},
@@ -125,7 +122,7 @@ func NewInterpreter() *Interpreter {
 			"outc":   {[]int{51}, true},
 			"outs":   {[]int{52}, true},
 			"outb":   {[]int{53}, true},
-			"input":  {[]int{54}, true},
+			"inputs": {[]int{54}, true},
 			"inputn": {[]int{55}, true},
 			"inputc": {[]int{56}, true},
 
@@ -160,9 +157,7 @@ func NewInterpreter() *Interpreter {
 		15: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{boolToInt(a == b)}); return nil },
 		16: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{boolToInt(a > b)}); return nil },
 		17: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{boolToInt(a < b)}); return nil },
-
-		20: func(i *Interpreter) error { i.push(i.vars[strings.ToLower(i.readString())].val); return nil },
-		21: func(i *Interpreter) error {
+		20: func(i *Interpreter) error {
 			name := strings.ToLower(i.readString())
 			v, ok := i.vars[name]
 			if !ok {
@@ -177,7 +172,7 @@ func NewInterpreter() *Interpreter {
 
 			return nil
 		},
-		22: func(i *Interpreter) error {
+		21: func(i *Interpreter) error {
 			name := strings.ToLower(i.readString())
 			_, ok := i.vars[name]
 			if ok {
@@ -188,7 +183,7 @@ func NewInterpreter() *Interpreter {
 
 			return nil
 		},
-		23: func(i *Interpreter) error {
+		22: func(i *Interpreter) error {
 			name := strings.ToLower(i.readString())
 			_, ok := i.vars[name]
 			if ok {
@@ -199,7 +194,7 @@ func NewInterpreter() *Interpreter {
 
 			return nil
 		},
-		24: func(i *Interpreter) error {
+		23: func(i *Interpreter) error {
 			name := strings.ToLower(i.readString())
 			_, ok := i.vars[name]
 			if ok {
@@ -214,7 +209,7 @@ func NewInterpreter() *Interpreter {
 
 			return nil
 		},
-		25: func(i *Interpreter) error {
+		24: func(i *Interpreter) error {
 			name := strings.ToLower(i.readString())
 			_, ok := i.vars[name]
 			if ok {
@@ -228,7 +223,7 @@ func NewInterpreter() *Interpreter {
 
 			return nil
 		},
-		26: func(i *Interpreter) error {
+		25: func(i *Interpreter) error {
 			name := strings.ToLower(i.readString())
 			v, ok := i.vars[name]
 			if !ok {
@@ -246,7 +241,7 @@ func NewInterpreter() *Interpreter {
 
 			return nil
 		},
-		27: func(i *Interpreter) error {
+		26: func(i *Interpreter) error {
 			name := strings.ToLower(i.readString())
 			_, ok := i.vars[name]
 			if !ok {
@@ -398,7 +393,7 @@ func (i *Interpreter) do() error {
 	return nil
 }
 
-func (i *Interpreter) Interpret() ([]int, error) {
+func (i *Interpreter) Interpret(Debug bool) ([]int, error) {
 	i.pos = 0
 	for i.pos < len(i.Tokens) {
 		tok := i.Tokens[i.pos]
@@ -413,7 +408,7 @@ func (i *Interpreter) Interpret() ([]int, error) {
 	}
 	i.pos = 0
 	for i.pos < len(i.Tokens) {
-		if DEBUG {
+		if Debug {
 			fmt.Printf("STACK PRE: %v\n", i.stack)
 			time.Sleep(time.Millisecond * time.Duration(10))
 		}
@@ -445,7 +440,7 @@ func (i *Interpreter) Interpret() ([]int, error) {
 		}
 
 		i.pos++
-		if DEBUG {
+		if Debug {
 			fmt.Printf("STACK POST: %v\n", i.stack)
 		}
 	}

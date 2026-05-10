@@ -6,11 +6,12 @@ import (
 	"os"
 
 	"github.com/QuantumV2/dodo"
+	"github.com/QuantumV2/dodo/pkg/helpers"
 	"github.com/QuantumV2/dodo/pkg/interpreter"
 	"github.com/QuantumV2/dodo/pkg/tokenizer"
 )
 
-var default_config dodo.Config = dodo.Config{AllowImports: true}
+var default_config dodo.Config = dodo.Config{AllowImports: true, Debug: false}
 
 func main() {
 	args := os.Args[1:]
@@ -18,6 +19,12 @@ func main() {
 	if len(args) == 0 {
 		runREPL()
 		return
+	}
+	if len(args) > 1 {
+		switch args[1] {
+		case "debug":
+			default_config.Debug = true
+		}
 	}
 
 	switch args[0] {
@@ -27,10 +34,11 @@ func main() {
 
 	case "init-lib":
 		if err := dodo.CreateLibDirIfMissing(); err != nil {
-			fmt.Fprintf(os.Stderr, "Error creating lib dir: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Error creating lib dir: %s\n", err.Error())
 			os.Exit(1)
 		}
-		fmt.Println("Library directory created.")
+		a, _ := helpers.DefaultLibDir()
+		fmt.Printf("Library directory at path %s created.\n", a)
 		return
 
 	case "help", "--help", "-h":
@@ -64,7 +72,7 @@ func printHelp() {
 	fmt.Println()
 	fmt.Println("Commands:")
 	fmt.Println("  repl       Start the interactive REPL")
-	fmt.Println("  init-lib   Create the global Dodo library directory")
+	fmt.Println("  init-lib   Create the global DODO library directory")
 	fmt.Println("  help       Show this help")
 	fmt.Println()
 	fmt.Println("If the first argument is not a command, it is treated as a script file.")
@@ -90,7 +98,7 @@ func runREPL() {
 			continue
 		}
 		i.Tokens = toks
-		_, err = i.Interpret()
+		_, err = i.Interpret(default_config.Debug)
 		if err != nil {
 			fmt.Printf("%s\n", err.Error())
 			continue

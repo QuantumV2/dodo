@@ -10,6 +10,7 @@ import (
 
 type Config struct {
 	AllowImports bool
+	Debug        bool
 }
 
 func Run(input string, cfg *Config) ([]int, error) {
@@ -20,7 +21,7 @@ func Run(input string, cfg *Config) ([]int, error) {
 	if err != nil {
 		return nil, err
 	}
-	return i.Interpret()
+	return i.Interpret(cfg.Debug)
 
 }
 
