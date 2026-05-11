@@ -58,6 +58,7 @@ func (t *Tokenizer) SplitTokens(code string, allowImports bool) ([]string, error
 
 		tokens = append(tokens, strings.ToLower(string(codeRunes[start:i])))
 
+		//TODO: add smth like #pragma once
 		if len(tokens) >= 2 && tokens[len(tokens)-1] == "import" {
 			if !allowImports {
 				return tokens, fmt.Errorf("Cannot use \"IMPORT\" because imports are disabled")
