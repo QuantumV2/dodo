@@ -106,10 +106,13 @@ func runREPL() {
 			continue
 		}
 		i.Tokens = toks
-		_, err = i.Interpret(default_config.Debug, default_config.DebugDelayMS)
+		output, err := i.Interpret(default_config.Debug, default_config.DebugDelayMS)
 		if err != nil {
 			fmt.Printf("%s\n", err.Error())
 			continue
+		}
+		if output != nil {
+			fmt.Printf("%v\n", output)
 		}
 
 	}
