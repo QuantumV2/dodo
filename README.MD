@@ -3,6 +3,8 @@
 DODO is a stack based retro-style programming language inspired by FORTH, BASIC, etc. \
 (Almost) everything in this language is a number on the stack, except minor stuff like labels, variable storage, and DO
 
+DO is used to execute every command because everything just pushes its opcode.
+
 ## Contributing
 We are always free for contributions, suggestions, and feedback! 
 Submit issues and pull requests to our codeberg repo instead of github. https://codeberg.org/QuantumV/dodo
@@ -27,6 +29,7 @@ Buffers are multiple ints enclosed by `{` (80) and `}` (81). When they are pushe
 | DO  | N/A | Executes the top instruction on the stack. Technically is not an instruction |
 | @NAME: | N/A | Creates a label with a name, no name is also valid. This has a separate pass so you can safely jump over it. |
 | IMPORT | N/A | Replaces itself and the preceding string by the contents of the file pointed to by the string, relative to the location where the command is run. Falls back to the DODO lib folder if it cant find it. |
+| ; | N/A | Initializes a comment from this token to the end of the line, the comment is not tokenized | 
 | VARIABLENAME | ~ | Pushes the value of the variable named, can push mutliple values.
 | NOP | 0 | Does nothing. At all. |
 ### Stack Ops
