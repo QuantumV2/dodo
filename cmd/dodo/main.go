@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/QuantumV2/dodo"
 	"github.com/QuantumV2/dodo/pkg/helpers"
@@ -11,7 +13,7 @@ import (
 	"github.com/QuantumV2/dodo/pkg/tokenizer"
 )
 
-var default_config dodo.Config = dodo.Config{AllowImports: true, Debug: false}
+var default_config dodo.Config = dodo.Config{AllowImports: true, Debug: false, DebugDelayMS: 0}
 
 func main() {
 	args := os.Args[1:]
@@ -24,6 +26,10 @@ func main() {
 		switch args[1] {
 		case "debug":
 			default_config.Debug = true
+			if len(args) > 2 {
+				a, _ := strconv.Atoi(args[2])
+				default_config.DebugDelayMS = time.Duration(a) * time.Millisecond
+			}
 		}
 	}
 
@@ -75,6 +81,8 @@ func printHelp() {
 	fmt.Println("  help       Show this help")
 	fmt.Println()
 	fmt.Println("Add a \"debug\" after any command to enter into debug mode and see things like the stack while the program is running.")
+	fmt.Println("Add a number after a \"debug\" to add a millisecond delay in computation.")
+	fmt.Println()
 	fmt.Println("If the first argument is not a command, it is treated as a script file.")
 }
 
@@ -98,7 +106,7 @@ func runREPL() {
 			continue
 		}
 		i.Tokens = toks
-		_, err = i.Interpret(default_config.Debug)
+		_, err = i.Interpret(default_config.Debug, default_config.DebugDelayMS)
 		if err != nil {
 			fmt.Printf("%s\n", err.Error())
 			continue

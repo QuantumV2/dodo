@@ -2,6 +2,7 @@ package dodo
 
 import (
 	"os"
+	"time"
 
 	"github.com/QuantumV2/dodo/pkg/helpers"
 	"github.com/QuantumV2/dodo/pkg/interpreter"
@@ -11,6 +12,7 @@ import (
 type Config struct {
 	AllowImports bool
 	Debug        bool
+	DebugDelayMS time.Duration
 }
 
 func Run(input string, cfg *Config) ([]int, error) {
@@ -21,7 +23,7 @@ func Run(input string, cfg *Config) ([]int, error) {
 	if err != nil {
 		return nil, err
 	}
-	return i.Interpret(cfg.Debug)
+	return i.Interpret(cfg.Debug, cfg.DebugDelayMS)
 
 }
 
