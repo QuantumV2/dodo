@@ -61,9 +61,8 @@ func runFile(filePath string) {
 		fmt.Fprintf(os.Stderr, "Runtime Error: %v\n", err)
 		os.Exit(1)
 	}
-
-	if result != nil {
-		fmt.Println(result)
+	if default_config.Debug && result != nil {
+		fmt.Printf("STACK END: %v\n", result)
 	}
 }
 
