@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/QuantumV2/dodo/pkg/helpers"
+	"codeberg.org/QuantumV/dodo/pkg/helpers"
 )
 
 type Tokenizer struct {

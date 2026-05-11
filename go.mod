@@ -1,3 +1,3 @@
-module github.com/QuantumV2/dodo
+module codeberg.org/QuantumV/dodo
 
 go 1.26.2

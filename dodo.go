@@ -4,9 +4,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/QuantumV2/dodo/pkg/helpers"
-	"github.com/QuantumV2/dodo/pkg/interpreter"
-	"github.com/QuantumV2/dodo/pkg/tokenizer"
+	"codeberg.org/QuantumV/dodo/pkg/helpers"
+	"codeberg.org/QuantumV/dodo/pkg/interpreter"
+	"codeberg.org/QuantumV/dodo/pkg/tokenizer"
 )
 
 type Config struct {

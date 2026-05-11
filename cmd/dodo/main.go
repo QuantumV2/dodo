@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/QuantumV2/dodo"
-	"github.com/QuantumV2/dodo/pkg/helpers"
-	"github.com/QuantumV2/dodo/pkg/interpreter"
-	"github.com/QuantumV2/dodo/pkg/tokenizer"
+	"codeberg.org/QuantumV/dodo"
+	"codeberg.org/QuantumV/dodo/pkg/helpers"
+	"codeberg.org/QuantumV/dodo/pkg/interpreter"
+	"codeberg.org/QuantumV/dodo/pkg/tokenizer"
 )
 
 var default_config dodo.Config = dodo.Config{AllowImports: true, Debug: false, DebugDelayMS: 0}

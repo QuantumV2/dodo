@@ -8,7 +8,7 @@ We are always free for contributions, suggestions, and feedback!
 Submit issues and pull requests to our codeberg repo instead of github. https://codeberg.org/QuantumV/dodo
 
 ## Installation 
-1. Run `go install github.com/QuantumV2/dodo/cmd/dodo`
+1. Run `go install codeberg.org/QuantumV/dodo/cmd/dodo`
 2. Ensure your go binaries path is in your PATH 
 3. Run `dodo help` for info
 4. Optionally, run `dodo init-lib` and move the `util` directory into the directory it gives you, so you can run code that depends on it!
