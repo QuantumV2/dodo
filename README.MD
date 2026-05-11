@@ -1,7 +1,7 @@
 # DODO
 
 DODO is a stack based retro-style programming language inspired by FORTH, BASIC, etc. \
-(Almost) everything in this language is a number on the stack, except minor stuff like labels, variables, and DO
+(Almost) everything in this language is a number on the stack, except minor stuff like labels, variable storage, and DO
 
 ## Contributing
 We are always free for contributions, suggestions, and feedback! 
