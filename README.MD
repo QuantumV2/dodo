@@ -5,6 +5,7 @@ DODO is a stack based retro-style programming language inspired by FORTH, BASIC,
 
 ## Contributing
 We are always free for contributions, suggestions, and feedback! 
+Submit issues and pull requests to our codeberg repo instead of github. https://codeberg.org/QuantumV/dodo
 
 ## Installation 
 1. Run `go install github.com/QuantumV2/dodo/cmd/dodo`
