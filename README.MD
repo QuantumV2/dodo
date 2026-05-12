@@ -56,9 +56,9 @@ B is the top of the stack, A is the element before the top
 |:------------|:------:|:------------|
 | SET | 20 | Sets a variable pointed to by the preceding string to a value. E.g. `10 "HI" SET` |
 | VAR | 21 | Initialize a numeric var. E.g. `10 "HI" VAR`   |
-| ALIAS | 21 | Initialize a constant numeric var. E.g. `10 "HI" ALIAS`   |
-| BUF | 21 | Initialize a buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 } "HI" VAR`   |
-| BUFALIAS | 21 | Initialize a constant buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 }  "HI" BUFALIAS`   |
+| ALIAS | 22 | Initialize a constant numeric var. E.g. `10 "HI" ALIAS`   |
+| BUF | 23 | Initialize a buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 } "HI" VAR`   |
+| BUFALIAS | 24 | Initialize a constant buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 }  "HI" BUFALIAS`   |
 | SETBUF | 25 | Sets a buffer variable. E.g. `{ 1 2 3 4 } "HI" SET` |
 | DEL | 26 | Permanently delete a variable or alias. This has no restrictions. E.g. `"HI" DEL`|
 | GET | 27 | Pushes a variable value to the stack by name, useful for getting variables generated at runtime |
@@ -81,7 +81,7 @@ B is the top of the stack, A is the element before the top
 | OUTB | 53 | Output top value as a buffer (`{ 1, 2, 3, }`) |
 | INPUTS | 54 | Input value as a string  |
 | INPUTN | 55 | Input value as a number  |
-| INPUTC | 54 | Input value as a character  |
+| INPUTC | 56 | Input value as a character  |
 ### Time Ops 
 | Instruction | Opcode | Description |
 |:------------|:------:|:------------|
