@@ -111,6 +111,7 @@ func NewInterpreter() *Interpreter {
 			"bufalias": {[]int{24}, true},
 			"setbuf":   {[]int{25}, true},
 			"del":      {[]int{26}, true},
+			"get":      {[]int{27}, true},
 
 			"goto":  {[]int{40}, true},
 			"gosub": {[]int{41}, true},
@@ -249,6 +250,15 @@ func NewInterpreter() *Interpreter {
 			}
 			delete(i.vars, name)
 
+			return nil
+		},
+		27: func(i *Interpreter) error {
+			name := strings.ToLower(i.readString())
+			v, ok := i.vars[name]
+			if !ok {
+				return fmt.Errorf("Variable %s does not exist", name)
+			}
+			i.push(v.val)
 			return nil
 		},
 		40: func(i *Interpreter) error {

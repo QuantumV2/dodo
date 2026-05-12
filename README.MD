@@ -60,7 +60,8 @@ B is the top of the stack, A is the element before the top
 | BUF | 21 | Initialize a buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 } "HI" VAR`   |
 | BUFALIAS | 21 | Initialize a constant buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 }  "HI" BUFALIAS`   |
 | SETBUF | 25 | Sets a buffer variable. E.g. `{ 1 2 3 4 } "HI" SET` |
-| DEL | 27 | Permanently delete a variable or alias. This has no restrictions. E.g. `"HI" DEL`|
+| DEL | 26 | Permanently delete a variable or alias. This has no restrictions. E.g. `"HI" DEL`|
+| GET | 27 | Pushes a variable value to the stack by name, useful for getting variables generated at runtime |
 
 
 ### Jump Ops
