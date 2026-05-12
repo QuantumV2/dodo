@@ -66,7 +66,8 @@ func (t *Tokenizer) SplitTokens(code string, allowImports bool) ([]string, error
 			path := tokens[len(tokens)-2]
 			path = path[1 : len(path)-1]
 			if _, ok := t.filesImported[path]; ok {
-				return tokens, fmt.Errorf("File %s already imported. check for circular references", path)
+				tokens = tokens[:len(tokens)-2]
+				continue
 			}
 			content, err := helpers.GetLibrary(path)
 			if err != nil {
