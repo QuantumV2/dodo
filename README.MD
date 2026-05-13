@@ -54,13 +54,13 @@ B is the top of the stack, A is the element before the top
 ### Var Ops
 | Instruction | Opcode | Description |
 |:------------|:------:|:------------|
-| SET | 20 | Sets a variable pointed to by the preceding string to a value. E.g. `10 "HI" SET` |
-| VAR | 21 | Initialize a numeric var. E.g. `10 "HI" VAR`   |
-| ALIAS | 22 | Initialize a constant numeric var. E.g. `10 "HI" ALIAS`   |
-| BUF | 23 | Initialize a buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 } "HI" BUF`   |
-| BUFALIAS | 24 | Initialize a constant buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 }  "HI" BUFALIAS`   |
-| SETBUF | 25 | Sets a buffer variable. E.g. `{ 1 2 3 4 } "HI" SET` |
-| DEL | 26 | Permanently delete a variable or alias. This has no restrictions. E.g. `"HI" DEL`|
+| SET | 20 | Sets a variable pointed to by the preceding string to a value. E.g. `10 "HI" SET DO` |
+| VAR | 21 | Initialize a numeric var. E.g. `10 "HI" VAR DO`   |
+| ALIAS | 22 | Initialize a constant numeric var. E.g. `10 "HI" ALIAS DO`   |
+| BUF | 23 | Initialize a buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 } "HI" BUF DO`   |
+| BUFALIAS | 24 | Initialize a constant buffer var that will push the contents of the buffer on use. E.g. `{ 1 2 3 4 }  "HI" BUFALIAS DO`   |
+| SETBUF | 25 | Sets a buffer variable. E.g. `{ 1 2 3 4 } "HI" SETBUF DO` |
+| DEL | 26 | Permanently delete a variable or alias. This has no restrictions. E.g. `"HI" DEL DO`|
 | GET | 27 | Pushes a variable value to the stack by name, useful for getting variables generated at runtime |
 
 
