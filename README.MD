@@ -38,7 +38,9 @@ Buffers are multiple ints enclosed by `{` (80) and `}` (81). When they are pushe
 | DUP | 1 | Duplicate top value on the stack |
 | POP | 2 | Discard top value on the stack |
 | SWAP| 3 | Swap two top values on the stack |
-| OVER| 4 | Push the value before the top value on the stack
+| OVER| 4 | Push the value before the top value on the stack |
+| LEN | 5 | Push stack length onto the stack
+
 ### Math Ops
 B is the top of the stack, A is the element before the top
 | Instruction | Opcode | Description |
