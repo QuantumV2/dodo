@@ -1,0 +1,16 @@
+; made by doeimos aka lunceman 
+99 "IND" VAR DO
+
+@LOOP:
+    IND OUTN DO " bottles of beer on the wall," OUTS DO 10 OUTC DO
+    IND OUTN DO " bottles of beer." OUTS DO 10 OUTC DO
+    "Take one down, pass it around," OUTS DO 10 OUTC DO
+    IND 1 - DO
+    "IND" SET DO
+    IND 1 = DO
+    "LOOP" JZ DO
+
+"1 bottle of beer on the wall," OUTS DO 10 OUTC DO
+"1 bottle of beer." OUTS DO 10 OUTC DO
+"Take one down, pass it around," OUTS DO 10 OUTC DO
+"No bottles of beer on the wall." OUTS DO 10 OUTC DO
