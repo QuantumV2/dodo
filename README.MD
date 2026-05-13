@@ -67,7 +67,7 @@ B is the top of the stack, A is the element before the top
 ### Jump Ops
 | Instruction | Opcode | Description |
 |:------------|:------:|:------------|
-| GOTO | 40 | Jumps to the label pointed to by the preceding string. E.g. `"MYLABEL" GOTO` | 
+| GOTO | 40 | Jumps to the label pointed to by the preceding string. E.g. `"MYLABEL" GOTO DO` | 
 | GOSUB | 41 | Jumps to a label, but also pushes the position to the call stack, so it can be returned to by...  |
 | RET | 42 | Jumps back to the caller |
 | JZ | 43 |  Jumps to a label, but only if the top of the stack is 0, also consumes it.
