@@ -29,8 +29,15 @@ func (i *Interpreter) push(v []int) {
 	i.stack = append(i.stack, v...)
 }
 func (i *Interpreter) pop() int {
+	var stack_len = len(i.stack)
+	if stack_len == 0 {
+		fmt.Printf(`   _
+  ;'> - << stack underflow! >>
+."..`)
+		return 0
+	}
 	var x int
-	x, i.stack = i.peek(), i.stack[:len(i.stack)-1]
+	x, i.stack = i.peek(), i.stack[:stack_len-1]
 	return x
 }
 func (i *Interpreter) expect(n int) error {
@@ -134,245 +141,236 @@ func NewInterpreter() *Interpreter {
 			"}": {[]int{81}, true},
 		},
 		labels:       map[string]int{},
-		instructions: map[int]func(i *Interpreter) error{},
-		Tokens:       []string{},
-		stack:        []int{},
-	}
-	default_func := func(i *Interpreter) error { ; return nil }
-	for n := 0; n < 256; n++ {
-		result.instructions[n] = default_func
-	}
-
-	defined_instructions := map[int]func(i *Interpreter) error{
-		1: func(i *Interpreter) error { i.dup(); return nil },
-		2: func(i *Interpreter) error { i.pop(); return nil },
-		3: func(i *Interpreter) error { a, b := i.pop(), i.pop(); i.push([]int{a, b}); return nil },
-		4: func(i *Interpreter) error { i.push([]int{i.stack[len(i.stack)-2]}); return nil },
-		5: func(i *Interpreter) error { i.push([]int{len(i.stack)}); return nil },
-
-		10: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a + b}); return nil },
-		11: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a - b}); return nil },
-		12: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a * b}); return nil },
-		13: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a / b}); return nil },
-		14: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a % b}); return nil },
-		15: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{boolToInt(a == b)}); return nil },
-		16: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{boolToInt(a > b)}); return nil },
-		17: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{boolToInt(a < b)}); return nil },
-		20: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			v, ok := i.vars[name]
-			if !ok {
-				return fmt.Errorf("Variable %s does not exist", name)
-			}
-			if v.is_const {
-				return fmt.Errorf("Cannot assign to constant variable %s", name)
-			}
-			val := i.pop()
-
-			v.val = []int{val}
-
-			return nil
-		},
-		21: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			_, ok := i.vars[name]
-			if ok {
-				return fmt.Errorf("Variable %s already exists", name)
-			}
-			val := i.pop()
-			i.vars[name] = &variable{val: []int{val}, is_const: false}
-
-			return nil
-		},
-		22: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			_, ok := i.vars[name]
-			if ok {
-				return fmt.Errorf("Variable %s already exists", name)
-			}
-			val := i.pop()
-			i.vars[name] = &variable{val: []int{val}, is_const: true}
-
-			return nil
-		},
-		23: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			_, ok := i.vars[name]
-			if ok {
-				return fmt.Errorf("Variable %s already exists", name)
-			}
-			val, err := i.readBuffer()
-			if err != nil {
-				return err
-			}
-
-			i.vars[name] = &variable{val: val, is_const: false}
-
-			return nil
-		},
-		24: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			_, ok := i.vars[name]
-			if ok {
-				return fmt.Errorf("Variable %s already exists", name)
-			}
-			val, err := i.readBuffer()
-			if err != nil {
-				return err
-			}
-			i.vars[name] = &variable{val: val, is_const: true}
-
-			return nil
-		},
-		25: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			v, ok := i.vars[name]
-			if !ok {
-				return fmt.Errorf("Variable %s does not exist", name)
-			}
-			if v.is_const {
-				return fmt.Errorf("Cannot assign to constant variable %s", name)
-			}
-			val, err := i.readBuffer()
-			if err != nil {
-				return err
-			}
-
-			v.val = val
-
-			return nil
-		},
-		26: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			_, ok := i.vars[name]
-			if !ok {
-				return fmt.Errorf("Variable %s does not exist", name)
-			}
-			delete(i.vars, name)
-
-			return nil
-		},
-		27: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			v, ok := i.vars[name]
-			if !ok {
-				return fmt.Errorf("Variable %s does not exist", name)
-			}
-			i.push(v.val)
-			return nil
-		},
-		40: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			v, ok := i.labels[name]
-			if !ok {
-				return fmt.Errorf("Label %s does not exist", name)
-			}
-			i.pos = v
-			return nil
-		},
-		41: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			v, ok := i.labels[name]
-			if !ok {
-				return fmt.Errorf("Label %s does not exist", name)
-			}
-			i.callstack = append(i.callstack, i.pos)
-			i.pos = v
-			return nil
-		},
-		42: func(i *Interpreter) error {
-			i.pos = i.callstack[len(i.callstack)-1]
-			i.callstack = i.callstack[:len(i.callstack)-1]
-			return nil
-		},
-		43: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			v, ok := i.labels[name]
-			if !ok {
-				return fmt.Errorf("Label %s does not exist", name)
-			}
-			cond := i.pop()
-			if cond == 0 {
-				i.pos = v
-			}
-			return nil
-		},
-		44: func(i *Interpreter) error {
-			name := strings.ToLower(i.readString())
-			v, ok := i.labels[name]
-			if !ok {
-				return fmt.Errorf("Label %s does not exist", name)
-			}
-			cond := i.pop()
-			if cond != 0 {
-				i.pos = v
-			}
-			return nil
-		},
-		50: func(i *Interpreter) error { val := i.pop(); fmt.Printf("%d", val); return nil },
-		51: func(i *Interpreter) error { val := i.pop(); fmt.Printf("%c", val); return nil },
-		52: func(i *Interpreter) error { val := i.readString(); fmt.Printf("%s", val); return nil },
-		53: func(i *Interpreter) error {
-			val, err := i.readBuffer()
-			if err != nil {
-				return err
-			}
-			fmt.Printf("{ ")
-			for _, v := range val {
-				fmt.Printf("%d, ", v)
-			}
-			fmt.Printf(" }")
-			return nil
-		},
-		54: func(i *Interpreter) error {
-			var input string
-			scanner := bufio.NewScanner(os.Stdin)
-			if scanner.Scan() {
-				input = scanner.Text()
-			}
-			i.push([]int{0})
-			content := []rune(input)
-			slices.Reverse(content)
-			i.push(runesToInts(content))
-			return nil
-		},
-		55: func(i *Interpreter) error {
-			var input int
-			scanner := bufio.NewScanner(os.Stdin)
-			if scanner.Scan() {
-				var err error
-				input, err = strconv.Atoi(scanner.Text())
+		instructions: map[int]func(i *Interpreter) error{
+			1: func(i *Interpreter) error { i.dup(); return nil },
+			2: func(i *Interpreter) error { i.pop(); return nil },
+			3: func(i *Interpreter) error { a, b := i.pop(), i.pop(); i.push([]int{a, b}); return nil },
+			4: func(i *Interpreter) error { i.push([]int{i.stack[len(i.stack)-2]}); return nil },
+			5: func(i *Interpreter) error { i.push([]int{len(i.stack)}); return nil },
+	
+			10: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a + b}); return nil },
+			11: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a - b}); return nil },
+			12: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a * b}); return nil },
+			13: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a / b}); return nil },
+			14: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a % b}); return nil },
+			15: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{boolToInt(a == b)}); return nil },
+			16: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{boolToInt(a > b)}); return nil },
+			17: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{boolToInt(a < b)}); return nil },
+			20: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				v, ok := i.vars[name]
+				if !ok {
+					return fmt.Errorf("Variable %s does not exist", name)
+				}
+				if v.is_const {
+					return fmt.Errorf("Cannot assign to constant variable %s", name)
+				}
+				val := i.pop()
+	
+				v.val = []int{val}
+	
+				return nil
+			},
+			21: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				_, ok := i.vars[name]
+				if ok {
+					return fmt.Errorf("Variable %s already exists", name)
+				}
+				val := i.pop()
+				i.vars[name] = &variable{val: []int{val}, is_const: false}
+	
+				return nil
+			},
+			22: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				_, ok := i.vars[name]
+				if ok {
+					return fmt.Errorf("Variable %s already exists", name)
+				}
+				val := i.pop()
+				i.vars[name] = &variable{val: []int{val}, is_const: true}
+	
+				return nil
+			},
+			23: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				_, ok := i.vars[name]
+				if ok {
+					return fmt.Errorf("Variable %s already exists", name)
+				}
+				val, err := i.readBuffer()
 				if err != nil {
 					return err
 				}
-			}
-			i.push([]int{input})
-			return nil
+	
+				i.vars[name] = &variable{val: val, is_const: false}
+	
+				return nil
+			},
+			24: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				_, ok := i.vars[name]
+				if ok {
+					return fmt.Errorf("Variable %s already exists", name)
+				}
+				val, err := i.readBuffer()
+				if err != nil {
+					return err
+				}
+				i.vars[name] = &variable{val: val, is_const: true}
+	
+				return nil
+			},
+			25: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				v, ok := i.vars[name]
+				if !ok {
+					return fmt.Errorf("Variable %s does not exist", name)
+				}
+				if v.is_const {
+					return fmt.Errorf("Cannot assign to constant variable %s", name)
+				}
+				val, err := i.readBuffer()
+				if err != nil {
+					return err
+				}
+	
+				v.val = val
+	
+				return nil
+			},
+			26: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				_, ok := i.vars[name]
+				if !ok {
+					return fmt.Errorf("Variable %s does not exist", name)
+				}
+				delete(i.vars, name)
+	
+				return nil
+			},
+			27: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				v, ok := i.vars[name]
+				if !ok {
+					return fmt.Errorf("Variable %s does not exist", name)
+				}
+				i.push(v.val)
+				return nil
+			},
+			40: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				v, ok := i.labels[name]
+				if !ok {
+					return fmt.Errorf("Label %s does not exist", name)
+				}
+				i.pos = v
+				return nil
+			},
+			41: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				v, ok := i.labels[name]
+				if !ok {
+					return fmt.Errorf("Label %s does not exist", name)
+				}
+				i.callstack = append(i.callstack, i.pos)
+				i.pos = v
+				return nil
+			},
+			42: func(i *Interpreter) error {
+				i.pos = i.callstack[len(i.callstack)-1]
+				i.callstack = i.callstack[:len(i.callstack)-1]
+				return nil
+			},
+			43: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				v, ok := i.labels[name]
+				if !ok {
+					return fmt.Errorf("Label %s does not exist", name)
+				}
+				cond := i.pop()
+				if cond == 0 {
+					i.pos = v
+				}
+				return nil
+			},
+			44: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				v, ok := i.labels[name]
+				if !ok {
+					return fmt.Errorf("Label %s does not exist", name)
+				}
+				cond := i.pop()
+				if cond != 0 {
+					i.pos = v
+				}
+				return nil
+			},
+			50: func(i *Interpreter) error { val := i.pop(); fmt.Printf("%d", val); return nil },
+			51: func(i *Interpreter) error { val := i.pop(); fmt.Printf("%c", val); return nil },
+			52: func(i *Interpreter) error { val := i.readString(); fmt.Printf("%s", val); return nil },
+			53: func(i *Interpreter) error {
+				val, err := i.readBuffer()
+				if err != nil {
+					return err
+				}
+				fmt.Printf("{ ")
+				for _, v := range val {
+					fmt.Printf("%d, ", v)
+				}
+				fmt.Printf(" }")
+				return nil
+			},
+			54: func(i *Interpreter) error {
+				var input string
+				scanner := bufio.NewScanner(os.Stdin)
+				if scanner.Scan() {
+					input = scanner.Text()
+				}
+				i.push([]int{0})
+				content := []rune(input)
+				slices.Reverse(content)
+				i.push(runesToInts(content))
+				return nil
+			},
+			55: func(i *Interpreter) error {
+				var input int
+				scanner := bufio.NewScanner(os.Stdin)
+				if scanner.Scan() {
+					var err error
+					input, err = strconv.Atoi(scanner.Text())
+					if err != nil {
+						return err
+					}
+				}
+				i.push([]int{input})
+				return nil
+			},
+			56: func(i *Interpreter) error {
+				var input rune
+				reader := bufio.NewReader(os.Stdin)
+				var err error
+				input, _, err = reader.ReadRune()
+				if err != nil {
+					return err
+				}
+				i.push([]int{int(input)})
+				return nil
+			},
+	
+			60: func(i *Interpreter) error {
+				t := i.pop()
+				time.Sleep(time.Duration(t) * time.Millisecond)
+				return nil
+			},
+			61: func(i *Interpreter) error {
+				i.push([]int{int(time.Now().UnixMilli())})
+				return nil
+			},
 		},
-		56: func(i *Interpreter) error {
-			var input rune
-			reader := bufio.NewReader(os.Stdin)
-			var err error
-			input, _, err = reader.ReadRune()
-			if err != nil {
-				return err
-			}
-			i.push([]int{int(input)})
-			return nil
-		},
-
-		60: func(i *Interpreter) error {
-			t := i.pop()
-			time.Sleep(time.Duration(t) * time.Millisecond)
-			return nil
-		},
-		61: func(i *Interpreter) error {
-			i.push([]int{int(time.Now().UnixMilli())})
-			return nil
-		},
-	}
-	for k, v := range defined_instructions {
-		result.instructions[k] = v
+		Tokens:       []string{},
+		stack:        []int{},
 	}
 
 	return &result
