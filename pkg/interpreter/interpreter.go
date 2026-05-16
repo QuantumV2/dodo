@@ -415,11 +415,11 @@ func (i *Interpreter) Interpret(Debug bool, Delay time.Duration) ([]int, error) 
 	}
 	i.pos = 0
 	for i.pos < len(i.Tokens) {
+		tok := i.Tokens[i.pos]
 		if Debug {
-			fmt.Printf("STACK PRE: %v\n", i.stack)
+			fmt.Printf("TOK: %s STACK PRE: %v\n", tok, i.stack)
 			time.Sleep(Delay)
 		}
-		tok := i.Tokens[i.pos]
 		switch {
 		case tok[0] == '"':
 			if tok[len(tok)-1] != '"' {

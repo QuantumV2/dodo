@@ -1,0 +1,76 @@
+"util/zigzag.dodo" IMPORT
+"!WARNING! YOU are trying to import a WIP library (tape.dodo) ! The code of this library is incorrect and in the process of being fixed!" OUTS DO 10 OUTC DO 
+
+; tape values by default have a zero offset of 256 to not conflict with default instructions
+; values are encoded with zigzag encoding + offset
+256 "__UTIL_TAPE_ZERO__" ALIAS DO 
+{ } "__UTIL_TAPE_LEFT__" BUF DO 
+{ __UTIL_TAPE_ZERO__ } "__UTIL_TAPE_RIGHT__" BUF DO 
+
+
+"__UTIL_TAPE_END_DEFS__" GOTO DO
+
+@__UTIL_TAPE_EXTEND_IF_ZERO__:
+    "__UTIL_TAPE_EXTEND_IF_ZERO_END_" JNZ DO
+    __UTIL_TAPE_ZERO__
+    @__UTIL_TAPE_EXTEND_IF_ZERO_END_:
+    RET DO
+    
+@__UTIL_TAPE_MOVE_RIGHT__:
+    {
+        LEN DO "__UTIL_TAPE_TEMP_PRELEN__" VAR DO 
+
+        __UTIL_TAPE_RIGHT__ 
+        LEN DO 1 - DO "__UTIL_TAPE_TEMP_POSTLEN__" VAR DO
+        __UTIL_TAPE_TEMP_POSTLEN__ __UTIL_TAPE_TEMP_PRELEN__ - DO
+        DUP DO
+        "__UTIL_TAPE_EXTEND_IF_ZERO__" GOSUB DO
+        "__UTIL_TAPE_TEMP__" VAR DO 
+
+    } "__UTIL_TAPE_RIGHT__" SETBUF DO 
+    { __UTIL_TAPE_LEFT__ __UTIL_TAPE_TEMP__ } "__UTIL_TAPE_LEFT__" SETBUF DO
+    "__UTIL_TAPE_TEMP__" DEL DO 
+    "__UTIL_TAPE_TEMP_PRELEN__" DEL DO 
+    "__UTIL_TAPE_TEMP_POSTLEN__" DEL DO 
+    RET DO
+@__UTIL_TAPE_MOVE_LEFT__:
+    {
+        LEN DO "__UTIL_TAPE_TEMP_PRELEN__" VAR DO 
+
+        __UTIL_TAPE_LEFT__ 
+        LEN DO 1 - DO  "__UTIL_TAPE_TEMP_POSTLEN__" VAR DO
+        __UTIL_TAPE_TEMP_POSTLEN__ __UTIL_TAPE_TEMP_PRELEN__ - DO
+        DUP DO
+        "__UTIL_TAPE_EXTEND_IF_ZERO__" GOSUB DO
+        "__UTIL_TAPE_TEMP__" VAR DO 
+
+    } "__UTIL_TAPE_LEFT__" SETBUF DO 
+    { __UTIL_TAPE_RIGHT__ __UTIL_TAPE_TEMP__ } "__UTIL_TAPE_RIGHT__" SETBUF DO
+    "__UTIL_TAPE_TEMP__" DEL DO 
+    "__UTIL_TAPE_TEMP_PRELEN__" DEL DO 
+    "__UTIL_TAPE_TEMP_POSTLEN__" DEL DO 
+    RET DO
+
+@__UTIL_TAPE_GET__:
+    { __UTIL_TAPE_RIGHT__ DUP DO "__UTIL_TAPE_GET_RESULT__" VAR DO } "__UTIL_TAPE_RIGHT__" SETBUF DO
+
+    __UTIL_TAPE_GET_RESULT__
+    __UTIL_TAPE_ZERO__ - DO 
+    ZIGDEC DO 
+
+    "__UTIL_TAPE_GET_RESULT__" DEL DO
+    RET DO
+
+@__UTIL_TAPE_SET__:
+    "__UTIL_TAPE_SET_ARG__" VAR DO 
+    { __UTIL_TAPE_RIGHT__ POP DO __UTIL_TAPE_SET_ARG__ ZIGENC DO __UTIL_TAPE_ZERO__ + DO  } "__UTIL_TAPE_RIGHT__" SETBUF DO
+    "__UTIL_TAPE_SET_ARG__" DEL DO
+    RET DO
+
+
+@__UTIL_TAPE_END_DEFS__:
+
+{ "__UTIL_TAPE_MOVE_RIGHT__" GOSUB } "TAPE_RIGHT" BUFALIAS DO 
+{ "__UTIL_TAPE_MOVE_LEFT__" GOSUB } "TAPE_LEFT" BUFALIAS DO 
+{ "__UTIL_TAPE_GET__" GOSUB } "TAPE_GET" BUFALIAS DO 
+{ "__UTIL_TAPE_SET__" GOSUB } "TAPE_SET" BUFALIAS DO 

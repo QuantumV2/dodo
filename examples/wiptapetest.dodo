@@ -1,0 +1,28 @@
+"util/tape.dodo" IMPORT
+
+"STARTSHERE" OUTS DO
+1 TAPE_SET DO
+{ __UTIL_TAPE_LEFT__ 0 0 0 __UTIL_TAPE_RIGHT__ } OUTB DO
+TAPE_RIGHT DO 
+80 TAPE_SET DO
+{ __UTIL_TAPE_LEFT__ 0 0 0 __UTIL_TAPE_RIGHT__ } OUTB DO 10 OUTC DO 
+"As seen here, for some reason the tape moves incorrectly, it outputs { 0, 0, 0, 258,  }{ 256, 0, 0, 0, 258, 416,  } even though its supposed to output something liek { 0, 0, 0, 258,  }{ 258, 0, 0, 0, 416,  }. Keep in mind that the left side of the stack goes left to right and the right side of the stack goes right to left on the cells. The top of the right part is the current cell.  This is just a reminder for you doeimos pls fix " OUTS DO 10 OUTC DO 
+;TAPE_RIGHT DO 
+;256 TAPE_SET DO
+;{ __UTIL_TAPE_LEFT__ 0 0 0 __UTIL_TAPE_RIGHT__ } OUTB DO
+;TAPE_RIGHT DO 
+;0 10 - DO  TAPE_SET DO
+;{ __UTIL_TAPE_LEFT__ 0 0 0 __UTIL_TAPE_RIGHT__ } OUTB DO
+;TAPE_RIGHT DO 
+;{ __UTIL_TAPE_LEFT__ 0 0 0 __UTIL_TAPE_RIGHT__ } OUTB DO
+;
+;TAPE_LEFT DO
+;TAPE_LEFT DO
+;TAPE_LEFT DO
+;TAPE_LEFT DO
+;{ __UTIL_TAPE_LEFT__ 0 0 0 __UTIL_TAPE_RIGHT__ } OUTB DO
+;@LOOP:
+;    TAPE_GET DO DUP DO OUTN DO 10 OUTC DO 
+;    TAPE_RIGHT DO
+;    
+;    "LOOP" JNZ DO
