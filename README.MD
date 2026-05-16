@@ -93,8 +93,8 @@ B is the top of the stack, A is the element before the top
 ### Default Consts
 | Const | Value | Description |
 |:------------|:------:|:------------|
-|{|80|Used for defining buffers |
-|}|81| Ditto |
+|{|6|Used for defining buffers |
+|}|7| Ditto |
 
 
 
