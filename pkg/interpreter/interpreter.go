@@ -101,6 +101,8 @@ func NewInterpreter() *Interpreter {
 			"swap": {[]int{3}, true},
 			"over": {[]int{4}, true},
 			"len":  {[]int{5}, true},
+			"{":    {[]int{6}, true},
+			"}":    {[]int{7}, true},
 
 			"+": {[]int{10}, true},
 			"-": {[]int{11}, true},
@@ -136,18 +138,15 @@ func NewInterpreter() *Interpreter {
 
 			"sleep": {[]int{60}, true},
 			"time":  {[]int{61}, true},
-
-			"{": {[]int{80}, true},
-			"}": {[]int{81}, true},
 		},
-		labels:       map[string]int{},
+		labels: map[string]int{},
 		instructions: map[int]func(i *Interpreter) error{
 			1: func(i *Interpreter) error { i.dup(); return nil },
 			2: func(i *Interpreter) error { i.pop(); return nil },
 			3: func(i *Interpreter) error { a, b := i.pop(), i.pop(); i.push([]int{a, b}); return nil },
 			4: func(i *Interpreter) error { i.push([]int{i.stack[len(i.stack)-2]}); return nil },
 			5: func(i *Interpreter) error { i.push([]int{len(i.stack)}); return nil },
-	
+
 			10: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a + b}); return nil },
 			11: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a - b}); return nil },
 			12: func(i *Interpreter) error { b, a := i.pop(), i.pop(); i.push([]int{a * b}); return nil },
@@ -166,9 +165,9 @@ func NewInterpreter() *Interpreter {
 					return fmt.Errorf("Cannot assign to constant variable %s", name)
 				}
 				val := i.pop()
-	
+
 				v.val = []int{val}
-	
+
 				return nil
 			},
 			21: func(i *Interpreter) error {
@@ -179,7 +178,7 @@ func NewInterpreter() *Interpreter {
 				}
 				val := i.pop()
 				i.vars[name] = &variable{val: []int{val}, is_const: false}
-	
+
 				return nil
 			},
 			22: func(i *Interpreter) error {
@@ -190,7 +189,7 @@ func NewInterpreter() *Interpreter {
 				}
 				val := i.pop()
 				i.vars[name] = &variable{val: []int{val}, is_const: true}
-	
+
 				return nil
 			},
 			23: func(i *Interpreter) error {
@@ -203,9 +202,9 @@ func NewInterpreter() *Interpreter {
 				if err != nil {
 					return err
 				}
-	
+
 				i.vars[name] = &variable{val: val, is_const: false}
-	
+
 				return nil
 			},
 			24: func(i *Interpreter) error {
@@ -219,7 +218,7 @@ func NewInterpreter() *Interpreter {
 					return err
 				}
 				i.vars[name] = &variable{val: val, is_const: true}
-	
+
 				return nil
 			},
 			25: func(i *Interpreter) error {
@@ -235,9 +234,9 @@ func NewInterpreter() *Interpreter {
 				if err != nil {
 					return err
 				}
-	
+
 				v.val = val
-	
+
 				return nil
 			},
 			26: func(i *Interpreter) error {
@@ -247,7 +246,7 @@ func NewInterpreter() *Interpreter {
 					return fmt.Errorf("Variable %s does not exist", name)
 				}
 				delete(i.vars, name)
-	
+
 				return nil
 			},
 			27: func(i *Interpreter) error {
@@ -358,7 +357,7 @@ func NewInterpreter() *Interpreter {
 				i.push([]int{int(input)})
 				return nil
 			},
-	
+
 			60: func(i *Interpreter) error {
 				t := i.pop()
 				time.Sleep(time.Duration(t) * time.Millisecond)
@@ -369,8 +368,8 @@ func NewInterpreter() *Interpreter {
 				return nil
 			},
 		},
-		Tokens:       []string{},
-		stack:        []int{},
+		Tokens: []string{},
+		stack:  []int{},
 	}
 
 	return &result
