@@ -1,6 +1,7 @@
 package dodo
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -20,6 +21,9 @@ func Run(input string, cfg *Config) ([]int, error) {
 	i := interpreter.NewInterpreter()
 	var err error
 	i.Tokens, err = t.SplitTokens(input, cfg.AllowImports)
+	if cfg.Debug {
+		fmt.Printf("%v", i.Tokens)
+	}
 	if err != nil {
 		return nil, err
 	}
