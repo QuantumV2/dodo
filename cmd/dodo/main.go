@@ -112,7 +112,7 @@ func runREPL() {
 			continue
 		}
 		if output != nil {
-			fmt.Printf("%v\n", output)
+			fmt.Printf("\n<%v", output)
 		}
 
 	}
