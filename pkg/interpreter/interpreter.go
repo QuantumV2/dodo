@@ -17,6 +17,7 @@ type variable struct {
 
 type Interpreter struct {
 	pos          int
+	brkmode      bool
 	vars         map[string]*variable
 	labels       map[string]int //name to token pos
 	instructions map[int]func(i *Interpreter) error
@@ -121,6 +122,8 @@ func NewInterpreter() *Interpreter {
 			"setbuf":   {[]int{25}, true},
 			"del":      {[]int{26}, true},
 			"get":      {[]int{27}, true},
+
+			"brk": {[]int{30}, true},
 
 			"goto":  {[]int{40}, true},
 			"gosub": {[]int{41}, true},
@@ -258,6 +261,12 @@ func NewInterpreter() *Interpreter {
 				i.push(v.val)
 				return nil
 			},
+
+			30: func(i *Interpreter) error {
+				i.brkmode = true
+				return nil
+			},
+
 			40: func(i *Interpreter) error {
 				name := strings.ToLower(i.readString())
 				v, ok := i.labels[name]
@@ -415,6 +424,21 @@ func (i *Interpreter) Interpret(Debug bool, Delay time.Duration) ([]int, error) 
 	}
 	i.pos = 0
 	for i.pos < len(i.Tokens) {
+		if i.brkmode {
+			var input string
+			scanner := bufio.NewScanner(os.Stdin)
+			if scanner.Scan() {
+				input = scanner.Text()
+			}
+			if len(input) != 0 {
+				if input[0] == '!' {
+					i.brkmode = false
+				}
+
+			}
+
+		}
+
 		tok := i.Tokens[i.pos]
 		if Debug {
 			fmt.Printf("TOK: %s STACK PRE: %v\n", tok, i.stack)
