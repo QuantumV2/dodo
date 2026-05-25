@@ -144,6 +144,7 @@ func NewInterpreter() *Interpreter {
 		},
 		labels: map[string]int{},
 		instructions: map[int]func(i *Interpreter) error{
+			0: func(i *Interpreter) error { return nil },
 			1: func(i *Interpreter) error { i.dup(); return nil },
 			2: func(i *Interpreter) error { i.pop(); return nil },
 			3: func(i *Interpreter) error { a, b := i.pop(), i.pop(); i.push([]int{a, b}); return nil },
