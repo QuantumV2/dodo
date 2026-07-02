@@ -64,7 +64,8 @@ B is the top of the stack, A is the element before the top
 | SETBUF | 25 | Sets a buffer variable. E.g. `{ 1 2 3 4 } "HI" SETBUF DO` |
 | DEL | 26 | Permanently delete a variable or alias. This has no restrictions. E.g. `"HI" DEL DO`|
 | GET | 27 | Pushes a variable value to the stack by name, useful for getting variables generated at runtime |
-
+| LABEL | 28 | Pops a string off the stack and creates a label at the current position of the same name. |
+| DELLABEL | 29 | Pops a string off the stack and murders a label of the same name. |
 
 ### Jump Ops
 | Instruction | Opcode | Description |

@@ -122,6 +122,8 @@ func NewInterpreter() *Interpreter {
 			"setbuf":   {[]int{25}, true},
 			"del":      {[]int{26}, true},
 			"get":      {[]int{27}, true},
+			"label":    {[]int{28}, true},
+			"dellabel": {[]int{29}, true},
 
 			"brk": {[]int{30}, true},
 
@@ -260,6 +262,21 @@ func NewInterpreter() *Interpreter {
 					return fmt.Errorf("Variable %s does not exist", name)
 				}
 				i.push(v.val)
+				return nil
+			},
+			28: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				i.labels[name] = i.pos
+				return nil
+			},
+			29: func(i *Interpreter) error {
+				name := strings.ToLower(i.readString())
+				_, ok := i.labels[name]
+				if !ok {
+					return fmt.Errorf("Label %s does not exist", name)
+				}
+				delete(i.labels, name)
+
 				return nil
 			},
 
