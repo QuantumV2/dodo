@@ -20,7 +20,7 @@ Submit issues and pull requests to our codeberg repo instead of github. https://
 ### Strings
 Strings work by first pushing 0 and then pushing themselves in reverse for convenient printing and such. So like reversed C Strings.
 ### Buffers
-Buffers are multiple ints enclosed by `{` (80) and `}` (81). When they are pushed by a variable, the brackets are excluded.
+Buffers are multiple ints enclosed by `{` (6) and `}` (7). When they are pushed by a variable, the brackets are excluded.
 
 ## Instructions 
 ### Misc
